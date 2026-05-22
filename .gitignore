@@ -1,0 +1,30 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+env/
+venv/
+.venv/
+
+# Streamlit cache and logs
+.streamlit/
+
+# Application data and draft files
+uploads/
+drafts/
+email_drafts/
+credentials.json
+token.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+*.code-workspace
+
+# Local Docker and build files
+*.log
