@@ -1,18 +1,18 @@
-from modules.gemini_llm import GeminiLLM
+from modules.llm_router import ModelRouter
 from typing import Dict, Optional
 
+
 class AIJobMatcher:
-    """Job matching using Google Gemini API"""
-    
-    def __init__(self, api_key: Optional[str] = None, model: str = "gemini-2.5-flash"):
-        """
-        Initialize with 2025 Gemini model
-        
-        Args:
-            api_key: Gemini API key
-            model: Model name (default: gemini-2.5-flash)
-        """
-        self.llm = GeminiLLM(api_key=api_key, model_name=model)
+    """Job matching using Gemini or Ollama based on the selected provider."""
+
+    def __init__(
+        self,
+        api_key: Optional[str] = None,
+        model: str = "gemini-2.5-flash",
+        llm=None,
+    ):
+        """Initialize the selected LLM backend."""
+        self.llm = llm or ModelRouter(provider="gemini", model_name=model, api_key=api_key)
         self.model = model
     
     # Rest of the code stays the same...

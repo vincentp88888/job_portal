@@ -1,17 +1,15 @@
-from modules.gemini_llm import GeminiLLM
+from modules.llm_router import ModelRouter
 from docx import Document
 from pathlib import Path
 from typing import Dict
 
+
 class DocumentGenerator:
-    """Generate documents using Google Gemini"""
-    
-    def __init__(self, api_key=None, model="gemini-2.5-flash"):
-        """
-        Initialize with 2025 Gemini model
-        gemini-2.5-flash is best for creative writing
-        """
-        self.llm = GeminiLLM(api_key=api_key, model_name=model)
+    """Generate documents using the selected model backend."""
+
+    def __init__(self, api_key=None, model="gemini-2.5-flash", llm=None):
+        """Initialize the selected LLM backend."""
+        self.llm = llm or ModelRouter(provider="gemini", model_name=model, api_key=api_key)
     
     # Rest of the code stays the same...
 

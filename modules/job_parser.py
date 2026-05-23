@@ -1,12 +1,18 @@
 import re
 from typing import Dict, Optional
-from modules.gemini_llm import GeminiLLM
+from modules.llm_router import ModelRouter
+
 
 class JobParser:
     """Job description parser for structured job intelligence."""
 
-    def __init__(self, api_key: Optional[str] = None, model: str = "gemini-2.5-flash"):
-        self.llm = GeminiLLM(api_key=api_key, model_name=model)
+    def __init__(
+        self,
+        api_key: Optional[str] = None,
+        model: str = "gemini-2.5-flash",
+        llm=None,
+    ):
+        self.llm = llm or ModelRouter(provider="gemini", model_name=model, api_key=api_key)
 
     def parse_job_description(self, text: str) -> Dict[str, str]:
         text = text.strip()

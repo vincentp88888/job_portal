@@ -1,11 +1,12 @@
-from modules.gemini_llm import GeminiLLM
+from modules.llm_router import ModelRouter
 from typing import Dict
 
+
 class InterviewPrepGenerator:
-    """Generate interview prep using Google Gemini"""
-    
-    def __init__(self, api_key=None, model="gemini-2.5-flash"):
-        self.llm = GeminiLLM(api_key=api_key, model_name=model)
+    """Generate interview prep using the selected model backend."""
+
+    def __init__(self, api_key=None, model="gemini-2.5-flash", llm=None):
+        self.llm = llm or ModelRouter(provider="gemini", model_name=model, api_key=api_key)
     
     # Rest of the code stays the same...
 
@@ -164,3 +165,38 @@ Provide 3 different approaches the candidate can choose from.
 """
         
         return self.llm.generate(prompt, temperature=0.7)
+
+    def get_answer_feedback(
+        self,
+        question: str,
+        candidate_answer: str
+    ) -> str:
+        """Generate feedback on a candidate's interview answer."""
+
+        system_prompt = """You are an expert interview coach for IT professionals in Singapore.
+You provide constructive and actionable feedback on interview answers, focusing on the STAR method, relevance, clarity, and professionalism."""
+
+        prompt = f"""
+I am preparing for an interview. Here is a question and my answer. Please provide feedback on my answer.
+
+INTERVIEW QUESTION:
+{question}
+
+MY ANSWER:
+{candidate_answer}
+
+Please evaluate my answer based on the following criteria:
+1.  **Relevance and Directness:** Does the answer directly address the question?
+2.  **STAR Method (if applicable):** If the question is behavioral, does the answer follow the Situation, Task, Action, Result (STAR) method effectively?
+3.  **Clarity and Conciseness:** Is the answer easy to understand and free of jargon? Is it concise enough?
+4.  **Professionalism:** Is the tone professional and confident?
+5.  **Specific Examples:** Does the answer include specific and relevant examples from your experience?
+
+Provide detailed and actionable feedback, suggesting improvements where necessary.
+"""
+        return self.llm.generate(
+            prompt,
+            system_prompt=system_prompt,
+            temperature=0.7,
+            max_tokens=1024
+        )

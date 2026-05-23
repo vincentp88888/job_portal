@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Prep</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Interview Preparation</h1>
+        <div class="interview-section">
+            <h2>Your Answer</h2>
+            <textarea id="yourAnswer" rows="10" cols="50"></textarea><br>
+            <button id="submitResponse">Submit Response</button>
+        </div>
+        <div class="feedback-section">
+            <h2>Feedback</h2>
+            <p id="feedbackContent"></p>
+        </div>
+    </div>
+    <script>
+        document.getElementById('submitResponse').addEventListener('click', async () => {
+            const yourAnswer = document.getElementById('yourAnswer').value;
+            const response = await fetch('/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ answer: yourAnswer })
+            });
+            const data = await response.json();
+            document.getElementById('feedbackContent').innerText = data.feedback;
+        });
+    </script>
+</body>
+</html>
